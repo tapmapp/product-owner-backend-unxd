@@ -26,7 +26,7 @@ export class ProductsRepository {
     }
 
     public async removeProduct(productId: string): Promise<void> {
-        this.prisma.product.delete({ where: { id: productId } });
+        await this.prisma.product.delete({ where: { id: productId } });
     }
 
 }

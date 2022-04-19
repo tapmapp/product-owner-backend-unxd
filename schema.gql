@@ -17,4 +17,5 @@ type Query {
 
 type Mutation {
   addProduct(name: String!, description: String!, img: String!, ref: String!): Product!
+  removeProduct(productId: String!): Boolean!
 }

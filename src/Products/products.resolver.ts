@@ -36,11 +36,12 @@ export class ProductsResolver {
         return product;
     }
 
-    @Mutation()
+    @Mutation(() => Boolean)
     async removeProduct(
         @Args('productId') productId: string
-    ) {
+    ): Promise<boolean> {
         await this.productsService.removeProduct(productId);
+        return true;
     }
 
 }
