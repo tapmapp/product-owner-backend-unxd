@@ -21,4 +21,8 @@ export class ProductsService {
         return products;
     }
 
+    async addProduct(id: string, name: string, img: string, ref: string): Promise<void> {
+        const products = await this.productsRepository.addProduct(id, name, img, ref);
+    }
+
 }

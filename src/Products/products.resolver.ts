@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 // MODELS
 import { Product } from './products.model';
@@ -19,4 +19,16 @@ export class ProductsResolver {
         const product = await this.productsService.getProduct(productId);
         return product;
     }
+
+
+    @Mutation(() => Product)
+    async reportAddress(
+        @Args({ name: 'id', type: () => String }) id: string,
+        @Args({ name: 'name', type: () => String }) name: string,
+        @Args({ name: 'img', type: () => String }) img: string,
+        @Args({ name: 'ref', type: () => String }) ref: string,
+    ) {
+        return this.productsService.addProduct(id, name, img, ref);
+    }
+
 }
