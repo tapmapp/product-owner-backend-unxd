@@ -25,4 +25,8 @@ export class ProductsRepository {
         return this.prisma.product.create({ data: { name, description, img, ref } });
     }
 
+    public async removeProduct(productId: string): Promise<void> {
+        this.prisma.product.delete({ where: { id: productId } });
+    }
+
 }

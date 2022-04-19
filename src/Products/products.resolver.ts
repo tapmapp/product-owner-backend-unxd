@@ -36,4 +36,11 @@ export class ProductsResolver {
         return product;
     }
 
+    @Mutation()
+    async removeProduct(
+        @Args('productId') productId: string
+    ) {
+        await this.productsService.removeProduct(productId);
+    }
+
 }
