@@ -5,10 +5,16 @@
 type Product {
   id: String!
   name: String!
+  description: String!
   img: String!
   ref: String!
 }
 
 type Query {
   getProduct(productId: String!): Product!
+  getProducts: [Product!]!
+}
+
+type Mutation {
+  addProduct(name: String!, description: String!, img: String!, ref: String!): Product!
 }

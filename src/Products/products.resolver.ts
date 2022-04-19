@@ -13,22 +13,27 @@ export class ProductsResolver {
 
     @Query(() => Product)
     async getProduct(
-        @Args('productId', { type: () => String }) productId: string
+        @Args('productId') productId: string
     ): Promise<Product> {
-
         const product = await this.productsService.getProduct(productId);
         return product;
     }
 
+    @Query(() => [Product])
+    async getProducts(): Promise<Product[]> {
+        const products = await this.productsService.getProducts();
+        return products;
+    }
 
     @Mutation(() => Product)
-    async reportAddress(
-        @Args({ name: 'id', type: () => String }) id: string,
+    async addProduct(
         @Args({ name: 'name', type: () => String }) name: string,
+        @Args({ name: 'description', type: () => String }) description: string,
         @Args({ name: 'img', type: () => String }) img: string,
         @Args({ name: 'ref', type: () => String }) ref: string,
     ) {
-        return this.productsService.addProduct(id, name, img, ref);
+        const product = this.productsService.addProduct(name, description, img, ref);
+        return product;
     }
 
 }

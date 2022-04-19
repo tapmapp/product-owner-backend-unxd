@@ -10,6 +10,9 @@ export class Product {
     name: string;
 
     @Field()
+    description: string;
+
+    @Field()
     img: string;
 
     @Field()
