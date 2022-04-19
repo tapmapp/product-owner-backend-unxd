@@ -12,7 +12,7 @@ export class ProductsRepository {
     constructor(private prisma: PrismaService) { }
 
     public async getProducts(): Promise<Product[]> {
-        return this.prisma.product.findMany();
+        return this.prisma.product.findMany()
     }
 
     public async getProduct(productId: string): Promise<Product> {
