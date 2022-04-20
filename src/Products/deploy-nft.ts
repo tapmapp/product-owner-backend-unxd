@@ -2,7 +2,7 @@ let fs = require("fs");
 let Web3 = require('web3');
 
 let web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
+web3.setProvider(new web3.providers.HttpProvider(process.env.APPLICATION_PORT));
 
 let source = fs.readFileSync("../abis/LuxOwn.json");
 let contracts = JSON.parse(source)["contracts"];
