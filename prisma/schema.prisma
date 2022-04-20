@@ -13,6 +13,7 @@ generator client {
 
 model Product {
   id String @id @default(uuid())
+  identifier String
   name String
   description String
   img String

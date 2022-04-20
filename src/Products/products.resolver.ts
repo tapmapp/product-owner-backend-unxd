@@ -27,12 +27,13 @@ export class ProductsResolver {
 
     @Mutation(() => Product)
     async addProduct(
+        @Args({ name: 'identifier', type: () => String }) identifier: string,
         @Args({ name: 'name', type: () => String }) name: string,
         @Args({ name: 'description', type: () => String }) description: string,
         @Args({ name: 'img', type: () => String }) img: string,
         @Args({ name: 'ref', type: () => String }) ref: string,
     ) {
-        const product = this.productsService.addProduct(name, description, img, ref);
+        const product = this.productsService.addProduct(identifier, name, description, img, ref);
         return product;
     }
 

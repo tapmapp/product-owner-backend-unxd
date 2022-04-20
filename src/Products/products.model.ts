@@ -7,6 +7,9 @@ export class Product {
     id: string;
 
     @Field()
+    identifier: string;
+
+    @Field()
     name: string;
 
     @Field()
