@@ -17,7 +17,7 @@ export class ProductsRepository {
 
     public async getProduct(productId: string): Promise<Product> {
         return this.prisma.product.findFirst({
-            where: { id: productId },
+            where: { productId },
         });
     }
 
