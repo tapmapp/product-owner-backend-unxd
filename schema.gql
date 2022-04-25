@@ -4,11 +4,9 @@
 
 type Product {
   id: String!
-  identifier: String!
-  name: String!
-  description: String!
-  img: String!
-  ref: String!
+  productBrand: String!
+  productReference: String!
+  productId: String!
 }
 
 type Query {
@@ -17,6 +15,6 @@ type Query {
 }
 
 type Mutation {
-  addProduct(identifier: String!, name: String!, description: String!, img: String!, ref: String!): Product!
+  addProduct(productBrand: String!, productReference: String!, productId: String!): Product!
   removeProduct(productId: String!): Boolean!
 }

@@ -27,13 +27,11 @@ export class ProductsResolver {
 
     @Mutation(() => Product)
     async addProduct(
-        @Args({ name: 'identifier', type: () => String }) identifier: string,
-        @Args({ name: 'name', type: () => String }) name: string,
-        @Args({ name: 'description', type: () => String }) description: string,
-        @Args({ name: 'img', type: () => String }) img: string,
-        @Args({ name: 'ref', type: () => String }) ref: string,
+        @Args({ name: 'productBrand', type: () => String }) productBrand: string,
+        @Args({ name: 'productReference', type: () => String }) productReference: string,
+        @Args({ name: 'productId', type: () => String }) productId: string,
     ) {
-        const product = this.productsService.addProduct(identifier, name, description, img, ref);
+        const product = this.productsService.addProduct(productBrand, productReference, productId);
         return product;
     }
 

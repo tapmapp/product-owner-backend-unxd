@@ -10,6 +10,8 @@ export async function deployNFT(address) {
     let contracts = JSON.parse(source)["contracts"];
     let abi = JSON.parse(contracts.LuxOwn.abi);
 
+    console.log(contracts);
+
     // Smart contract EVM bytecode as hex
     let code = '0x' + contracts.LuxOwn.bin;
 
@@ -52,4 +54,20 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// import { ethers } from 'ethers';
 
+
+// let source = fs.readFileSync("../abis/LuxOwn.json");
+// let contracts = JSON.parse(source)["contracts"];
+// let abi = JSON.parse(contracts.LuxOwn.abi);
+
+
+// // Connect to the network
+// let provider = ethers.getDefaultProvider();
+
+// // The address from the above deployment example
+// let contractAddress = "0x2bD9aAa2953F988153c8629926D22A6a5F69b14E";
+
+// // We connect to the Contract using a Provider, so we will only
+// // have read-only access to the Contract
+// let contract = new ethers.Contract(contractAddress, abi, provider);

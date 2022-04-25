@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
+// NFT
+import { createNewNft } from './deploy-nft';
+
 // MODELS
 import { Product } from './products.model';
 
@@ -21,8 +24,9 @@ export class ProductsService {
         return products;
     }
 
-    async addProduct(identifier: string, name: string, description: string, img: string, ref: string): Promise<Product> {
-        const product = await this.productsRepository.addProduct(identifier, name, description, img, ref);
+    async addProduct(productBrand: string, productReference: string, productId: string): Promise<Product> {
+        const product = await this.productsRepository.addProduct(productBrand, productReference, productId);
+        createNewNft(productBrand, productReference, productId);
         return product
     }
 

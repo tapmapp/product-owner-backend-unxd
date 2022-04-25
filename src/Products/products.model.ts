@@ -7,18 +7,12 @@ export class Product {
     id: string;
 
     @Field()
-    identifier: string;
+    productBrand: string;
 
     @Field()
-    name: string;
+    productReference: string;
 
     @Field()
-    description: string;
-
-    @Field()
-    img: string;
-
-    @Field()
-    ref: string;
+    productId: string;
 
 }
