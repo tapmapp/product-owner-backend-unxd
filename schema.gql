@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Account {
+  id: String!
+  accountEmail: String!
+  accountPassword: String!
+}
+
 type Product {
   id: String!
   productBrand: String!
@@ -10,11 +16,15 @@ type Product {
 }
 
 type Query {
+  getAccount(accountEmail: String!): Account!
+  getAccounts: [Account!]!
   getProduct(productId: String!): Product!
   getProducts: [Product!]!
 }
 
 type Mutation {
+  addAccount(accountEmail: String!, accountPassword: String!): Account!
+  removeAccount(accountEmail: String!): Boolean!
   addProduct(productBrand: String!, productReference: String!, productId: String!): Product!
   removeProduct(productId: String!): Boolean!
 }

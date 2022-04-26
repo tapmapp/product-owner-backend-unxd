@@ -12,5 +12,11 @@ model Product {
   id String @id @default(uuid())
   productBrand String
   productReference String
-  productId String
+  productId String @unique
+}
+
+model Account {
+  id String @id @default(uuid())
+  accountEmail String @unique
+  accountPassword String
 }

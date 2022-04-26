@@ -4,21 +4,22 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { join } from 'path';
 
 // MODULES
+import { AccountModule } from './Account/account.module';
 import { ProductsModule } from './Products/products.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { join } from 'path';
 
 @Module({
   imports: [
+    AccountModule,
     ConfigModule.forRoot(),
     ProductsModule,
     PrismaModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: 'schema.gql',
       driver: ApolloDriver,
-
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
