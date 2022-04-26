@@ -10,7 +10,9 @@ datasource db {
 
 model Product {
   id String @id @default(uuid())
-  productBrand String
+  brandId String
+  productImg String
+  productName String
   productReference String
   productId String @unique
 }
@@ -19,4 +21,7 @@ model Account {
   id String @id @default(uuid())
   accountEmail String @unique
   accountPassword String
+  accountName String
+  accountAvatar String?
+  accountWalletAddress String?
 }

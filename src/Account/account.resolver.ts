@@ -29,8 +29,9 @@ export class AccountResolver {
     async addAccount(
         @Args({ name: 'accountEmail', type: () => String }) accountEmail: string,
         @Args({ name: 'accountPassword', type: () => String }) accountPassword: string,
+        @Args({ name: 'accountName', type: () => String }) accountName: string,
     ) {
-        const account = await this.accountService.addAccount(accountEmail, accountPassword);
+        const account = await this.accountService.addAccount(accountEmail, accountPassword, accountName);
         return account;
     }
 

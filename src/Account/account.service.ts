@@ -19,8 +19,8 @@ export class AccountService {
         return await this.accountRepository.getAccounts();
     }
 
-    async addAccount(accountEmail: string, accountPassword: string): Promise<Account> {
-        return await this.accountRepository.addAccount(accountEmail, accountPassword);
+    async addAccount(accountEmail: string, accountPassword: string, accountName: string): Promise<Account> {
+        return await this.accountRepository.addAccount(accountEmail, accountPassword, accountName);
     }
 
     async removeAccount(accountEmail: string): Promise<void> {

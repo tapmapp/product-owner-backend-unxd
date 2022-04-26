@@ -15,19 +15,19 @@ export class ProductsService {
     constructor(private productsRepository: ProductsRepository) { }
 
     async getProduct(productId: string): Promise<Product> {
-        const product = await this.productsRepository.getProduct(productId);
-        return product;
+        return await this.productsRepository.getProduct(productId);
     }
 
     async getProducts(): Promise<Product[]> {
-        const products = await this.productsRepository.getProducts();
-        return products;
+        return await this.productsRepository.getProducts();
     }
 
-    async addProduct(productBrand: string, productReference: string, productId: string): Promise<Product> {
-        const product = await this.productsRepository.addProduct(productBrand, productReference, productId);
-        deployNFT(productBrand, productReference, productId);
-        return product
+    async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productId: string): Promise<Product> {
+        // deployNFT(brandId, productReference, productId);
+
+
+        
+        return await this.productsRepository.addProduct(productImg, productName, brandId, productReference, productId);
     }
 
     async removeProduct(productId: string): Promise<void> {

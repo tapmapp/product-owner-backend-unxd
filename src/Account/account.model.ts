@@ -12,4 +12,13 @@ export class Account {
     @Field()
     accountPassword: string;
 
+    @Field()
+    accountName: string;
+
+    @Field()
+    accountAvatar: string;
+
+    @Field()
+    accountWalletAddress: string;
+
 }

@@ -21,8 +21,8 @@ export class ProductsRepository {
         });
     }
 
-    public async addProduct(productBrand: string, productReference: string, productId: string): Promise<Product> {
-        return this.prisma.product.create({ data: { productBrand, productReference, productId } });
+    public async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productId: string): Promise<Product> {
+        return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productId } });
     }
 
     public async removeProduct(productId: string): Promise<void> {

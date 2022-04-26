@@ -1,4 +1,6 @@
+import { Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 // MODELS
 import { Product } from './products.model';
@@ -27,11 +29,13 @@ export class ProductsResolver {
 
     @Mutation(() => Product)
     async addProduct(
-        @Args({ name: 'productBrand', type: () => String }) productBrand: string,
+        @Args({ name: 'productImg', type: () => String }) productImg: string,
+        @Args({ name: 'productName', type: () => String }) productName: string,
+        @Args({ name: 'brandId', type: () => String }) brandId: string,
         @Args({ name: 'productReference', type: () => String }) productReference: string,
         @Args({ name: 'productId', type: () => String }) productId: string,
     ) {
-        const product = this.productsService.addProduct(productBrand, productReference, productId);
+        const product = this.productsService.addProduct(productImg, productName, brandId, productReference, productId);
         return product;
     }
 
@@ -41,6 +45,12 @@ export class ProductsResolver {
     ): Promise<boolean> {
         await this.productsService.removeProduct(productId);
         return true;
+    }
+
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    uploadFile(@UploadedFile() file: Express.Multer.File) {
+        console.log(file);
     }
 
 }

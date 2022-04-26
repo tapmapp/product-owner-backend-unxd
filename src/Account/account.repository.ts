@@ -21,8 +21,8 @@ export class AccountRepository {
         });
     }
 
-    public async addAccount(accountEmail: string, accountPassword: string): Promise<Account> {
-        return this.prisma.account.create({ data: { accountEmail, accountPassword } });
+    public async addAccount(accountEmail: string, accountPassword: string, accountName: string): Promise<Account> {
+        return this.prisma.account.create({ data: { accountEmail, accountPassword, accountName } });
     }
 
     public async removeAccount(accountEmail: string): Promise<void> {
