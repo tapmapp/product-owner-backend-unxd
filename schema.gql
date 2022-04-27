@@ -9,6 +9,7 @@ type Account {
   accountName: String!
   accountAvatar: String!
   accountWalletAddress: String!
+  role: String!
 }
 
 type Product {
@@ -20,11 +21,20 @@ type Product {
   productImg: String!
 }
 
+type Owner {
+  id: String!
+  brandId: String!
+  productReference: String!
+  productId: String!
+  transactionHash: String!
+}
+
 type Query {
   getAccount(accountEmail: String!): Account!
   getAccounts: [Account!]!
   getProduct(productId: String!): Product!
   getProducts: [Product!]!
+  mintNFT(brandId: String!, productReference: String!, productId: String!): Owner!
 }
 
 type Mutation {

@@ -6,16 +6,20 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'path';
 
+// PRISMA
+import { PrismaModule } from './prisma/prisma.module';
+
 // MODULES
 import { AccountModule } from './Account/account.module';
-import { ProductsModule } from './Products/products.module';
-import { PrismaModule } from './prisma/prisma.module';
+import { ProductModule } from './Product/product.module';
+import { OwnerModule } from './Owner/owner.module';
 
 @Module({
   imports: [
     AccountModule,
     ConfigModule.forRoot(),
-    ProductsModule,
+    ProductModule,
+    OwnerModule,
     PrismaModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: 'schema.gql',

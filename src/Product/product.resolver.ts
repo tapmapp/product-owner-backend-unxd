@@ -3,29 +3,30 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 // MODELS
-import { Product } from './products.model';
+import { Product } from './product.model';
 
 // SERVICES
-import { ProductsService } from './products.service';
+import { ProductService } from './product.service';
 
 @Resolver()
-export class ProductsResolver {
+export class ProductResolver {
 
-    constructor(private productsService: ProductsService) { }
+    constructor(private productService: ProductService) { }
 
     @Query(() => Product)
     async getProduct(
         @Args('productId') productId: string
     ): Promise<Product> {
-        const product = await this.productsService.getProduct(productId);
+        const product = await this.productService.getProduct(productId);
         return product;
     }
 
     @Query(() => [Product])
     async getProducts(): Promise<Product[]> {
-        const products = await this.productsService.getProducts();
+        const products = await this.productService.getProducts();
         return products;
     }
+
 
     @Mutation(() => Product)
     async addProduct(
@@ -35,7 +36,7 @@ export class ProductsResolver {
         @Args({ name: 'productReference', type: () => String }) productReference: string,
         @Args({ name: 'productId', type: () => String }) productId: string,
     ) {
-        const product = this.productsService.addProduct(productImg, productName, brandId, productReference, productId);
+        const product = this.productService.addProduct(productImg, productName, brandId, productReference, productId);
         return product;
     }
 
@@ -43,7 +44,7 @@ export class ProductsResolver {
     async removeProduct(
         @Args('productId') productId: string
     ): Promise<boolean> {
-        await this.productsService.removeProduct(productId);
+        await this.productService.removeProduct(productId);
         return true;
     }
 

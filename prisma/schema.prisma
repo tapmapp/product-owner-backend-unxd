@@ -24,4 +24,13 @@ model Account {
   accountName String
   accountAvatar String?
   accountWalletAddress String?
+  role String?
+}
+
+model Owner {
+  id String @id @default(uuid())
+  brandId String
+  productReference String
+  productId String
+  transactionHash String
 }

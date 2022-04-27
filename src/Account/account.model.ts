@@ -21,4 +21,7 @@ export class Account {
     @Field()
     accountWalletAddress: string;
 
+    @Field()
+    role: string;
+
 }

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
 // MODELS
-import { Product } from './products.model';
+import { Product } from './product.model';
 
 // SERVICES
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class ProductsRepository {
+export class ProductRepository {
 
     constructor(private prisma: PrismaService) { }
 

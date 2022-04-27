@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import Web3 from 'web3';
+import { TransactionReceipt } from 'web3-core';
 
-export async function deployNFT(productBrand, productReference, productId) {
+export async function deployNFT(productBrand, productReference, productId): Promise<TransactionReceipt> {
 
     let source = fs.readFileSync(`${__dirname}/../public/abis/LuxOwnFactory.json`, 'utf-8');
 
@@ -28,8 +29,9 @@ export async function deployNFT(productBrand, productReference, productId) {
 
     try {
         const receipt = await provider.eth.sendTransaction(txData);
-        console.log(receipt);
-        console.log('done!');
+        provider.eth.accounts.wallet.clear();
+        console.log('TRANSACTION SENT!');
+        return receipt;
     } catch (error) {
         console.log('THERE WAS AN ERROR SENDING YOUR TRANSACTION!')
         console.log(error);

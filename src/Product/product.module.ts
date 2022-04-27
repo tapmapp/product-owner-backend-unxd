@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { PrismaModule } from 'src/prisma/prisma.module';
-import { ProductsRepository } from './products.repository';
+import { ProductRepository } from './product.repository';
 
 // RESOLVERS
-import { ProductsResolver } from './products.resolver';
+import { ProductResolver } from './product.resolver';
 
 // SERVICES
-import { ProductsService } from './products.service';
+import { ProductService } from './product.service';
 
 @Module({
-    providers: [ProductsResolver, ProductsService, ProductsRepository],
-    exports: [ProductsRepository],
+    providers: [ProductResolver, ProductService, ProductRepository],
+    exports: [ProductRepository],
     imports: [
         PrismaModule,
         MulterModule.register({
@@ -19,4 +19,4 @@ import { ProductsService } from './products.service';
         })
     ],
 })
-export class ProductsModule { }
+export class ProductModule { }
