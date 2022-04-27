@@ -3,22 +3,22 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class Product {
 
-    @Field()
+    @Field(() => String)
     id: string;
 
-    @Field()
+    @Field(() => String)
     productName: string;
 
-    @Field()
+    @Field(() => String)
     brandId: string;
 
-    @Field()
+    @Field(() => String)
     productReference: string;
 
-    @Field()
-    productId: string;
+    @Field(() => [String])
+    productIdentifiers: string[];
 
-    @Field()
+    @Field(() => String)
     productImg: string;
 
 }

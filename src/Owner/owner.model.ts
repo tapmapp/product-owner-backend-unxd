@@ -3,19 +3,19 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class Owner {
 
-    @Field()
+    @Field(() => String)
     id: string;
 
-    @Field()
+    @Field(() => String)
     brandId: string;
 
-    @Field()
+    @Field(() => String)
     productReference: string;
 
-    @Field()
-    productId: string;
+    @Field(() => String)
+    productIdentifier: string;
 
-    @Field()
+    @Field(() => String)
     transactionHash: string;
 
 }

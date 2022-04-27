@@ -3,25 +3,25 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class Account {
 
-    @Field()
+    @Field(() => String)
     id: string;
 
-    @Field()
+    @Field(() => String)
     accountEmail: string;
 
-    @Field()
+    @Field(() => String)
     accountPassword: string;
 
-    @Field()
+    @Field(() => String)
     accountName: string;
 
-    @Field()
+    @Field(() => String)
     accountAvatar: string;
 
-    @Field()
+    @Field(() => String)
     accountWalletAddress: string;
 
-    @Field()
+    @Field(() => String)
     role: string;
 
 }

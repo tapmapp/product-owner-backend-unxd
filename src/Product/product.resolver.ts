@@ -15,9 +15,9 @@ export class ProductResolver {
 
     @Query(() => Product)
     async getProduct(
-        @Args('productId') productId: string
+        @Args('productReference') productReference: string
     ): Promise<Product> {
-        const product = await this.productService.getProduct(productId);
+        const product = await this.productService.getProduct(productReference);
         return product;
     }
 
@@ -34,17 +34,17 @@ export class ProductResolver {
         @Args({ name: 'productName', type: () => String }) productName: string,
         @Args({ name: 'brandId', type: () => String }) brandId: string,
         @Args({ name: 'productReference', type: () => String }) productReference: string,
-        @Args({ name: 'productId', type: () => String }) productId: string,
+        @Args({ name: 'productIdentifiers', type: () => [String] }) productIdentifiers: string[],
     ) {
-        const product = this.productService.addProduct(productImg, productName, brandId, productReference, productId);
+        const product = this.productService.addProduct(productImg, productName, brandId, productReference, productIdentifiers);
         return product;
     }
 
     @Mutation(() => Boolean)
     async removeProduct(
-        @Args('productId') productId: string
+        @Args('productReference') productReference: string
     ): Promise<boolean> {
-        await this.productService.removeProduct(productId);
+        await this.productService.removeProduct(productReference);
         return true;
     }
 

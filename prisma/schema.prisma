@@ -13,8 +13,8 @@ model Product {
   brandId String
   productImg String
   productName String
-  productReference String
-  productId String @unique
+  productReference String @unique
+  productIdentifiers String[] 
 }
 
 model Account {
@@ -30,7 +30,7 @@ model Account {
 model Owner {
   id String @id @default(uuid())
   brandId String
-  productReference String
-  productId String
-  transactionHash String
+  productReference String @unique
+  productIdentifier String @unique
+  transactionHash String @unique
 }

@@ -15,13 +15,13 @@ export class OwnerService {
 
     constructor(private ownerRepository: OwnerRepository) { }
 
-    async mintNFT(brandId: string, productReference: string, productId: string): Promise<TransactionReceipt> {
-        const transactionReceipt = await deployNFT(brandId, productReference, productId);
+    async mintNFT(brandId: string, productReference: string, productIdentifier: string): Promise<TransactionReceipt> {
+        const transactionReceipt = await deployNFT(brandId, productReference, productIdentifier);
         console.log(transactionReceipt);
         return transactionReceipt;
     }
 
-    async addOwner(brandId: string, productReference: string, productId: string, transactionHash: string): Promise<Owner> {
-        return await this.ownerRepository.addOwner(brandId, productReference, productId, transactionHash);
+    async addOwner(brandId: string, productReference: string, productIdentifier: string, transactionHash: string): Promise<Owner> {
+        return await this.ownerRepository.addOwner(brandId, productReference, productIdentifier, transactionHash);
     }
 }

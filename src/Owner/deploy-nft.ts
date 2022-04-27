@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import Web3 from 'web3';
 import { TransactionReceipt } from 'web3-core';
 
-export async function deployNFT(productBrand, productReference, productId): Promise<TransactionReceipt> {
+export async function deployNFT(productBrand: string, productReference: string, productId: string): Promise<TransactionReceipt> {
 
     let source = fs.readFileSync(`${__dirname}/../public/abis/LuxOwnFactory.json`, 'utf-8');
 
@@ -13,7 +13,11 @@ export async function deployNFT(productBrand, productReference, productId): Prom
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
 
-    const tx = LXOContract.methods.createNew(parseInt(productBrand), parseInt(productReference), parseInt(productId));
+    const tx = LXOContract.methods.createNew(
+        Web3.utils.keccak256(productBrand),
+        Web3.utils.keccak256(productReference),
+        Web3.utils.keccak256(productId)
+    );
     const gas = await tx.estimateGas({ from: process.env.LXO_ACCOUNT });
 
     const gasPrice = await provider.eth.getGasPrice();

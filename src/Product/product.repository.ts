@@ -15,18 +15,18 @@ export class ProductRepository {
         return this.prisma.product.findMany()
     }
 
-    public async getProduct(productId: string): Promise<Product> {
+    public async getProduct(productReference: string): Promise<Product> {
         return this.prisma.product.findFirst({
-            where: { productId },
+            where: { productReference },
         });
     }
 
-    public async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productId: string): Promise<Product> {
-        return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productId } });
+    public async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: string[]): Promise<Product> {
+        return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productIdentifiers } });
     }
 
-    public async removeProduct(productId: string): Promise<void> {
-        await this.prisma.product.delete({ where: { id: productId } });
+    public async removeProduct(productReference: string): Promise<void> {
+        await this.prisma.product.delete({ where: { id: productReference } });
     }
 
 }
