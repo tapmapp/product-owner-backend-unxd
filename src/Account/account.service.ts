@@ -28,7 +28,7 @@ export class AccountService {
         if (account) {
 
             // CHECK IF PASSWORD MATCH
-            const passwordMatch = await bcrypt.compare(accountPassword, account.accountPassword);
+            const passwordMatch = await this.comparePassword(accountPassword, account.accountPassword);
             if (passwordMatch) {
 
                 // GENERATE JWT TOKEN
@@ -52,7 +52,7 @@ export class AccountService {
     }
 
     async signIn(accountEmail: string, accountPassword: string, accountName: string): Promise<Account> {
-        return await this.accountRepository.addAccount(accountEmail, bcrypt.hash(accountPassword, 10), accountName);
+        return await this.accountRepository.addAccount(accountEmail, this.hashPassword(accountPassword), accountName);
     }
 
     async removeAccount(accountEmail: string): Promise<void> {
@@ -60,21 +60,12 @@ export class AccountService {
     }
 
 
-    /*
-    
-        // CREATE ENCRYPTED PASSWORD
-merchantSchema.methods.encryptPassword = password => {
-  return bcrypt.hash(password, 10);
-}
+    hashPassword(password: string): string {
+        return bcrypt.hash(password, 10);
+    }
 
-// CHECK IF PASSWORD MATCH
-merchantSchema.methods.validPassword = (password, farmerPassword) => {
-  return bcrypt.compare(password, farmerPassword);
-}
-
-    
-    */
-
-
+    comparePassword(sentPassword: string, accountPassword): Promise<boolean> {
+        return bcrypt.compare(sentPassword, accountPassword);
+    }
 
 }
