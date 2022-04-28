@@ -25,13 +25,22 @@ export class AccountResolver {
         return accounts;
     }
 
+    @Query(() => Account)
+    async logIn(
+        @Args('accountEmail') accountEmail: string,
+        @Args('accountPassword') accountPassword: string
+    ): Promise<Account> {
+        const account = await this.accountService.logIn(accountEmail, accountPassword);
+        return account;
+    }
+
     @Mutation(() => Account)
-    async addAccount(
+    async signIn(
         @Args({ name: 'accountEmail', type: () => String }) accountEmail: string,
         @Args({ name: 'accountPassword', type: () => String }) accountPassword: string,
         @Args({ name: 'accountName', type: () => String }) accountName: string,
     ) {
-        const account = await this.accountService.addAccount(accountEmail, accountPassword, accountName);
+        const account = await this.accountService.signIn(accountEmail, accountPassword, accountName);
         return account;
     }
 
