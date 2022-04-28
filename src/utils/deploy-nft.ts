@@ -21,12 +21,12 @@ export async function deployNFTContract(productReference: string): Promise<void>
     }).send({
         from: process.env.LXO_ACCOUNT,
         gas: 3000000,
-    }).on('error', (error) => {
+    }).on('error', (error: Error) => {
         console.log(error);
-    }).on('transactionHash', (transactionHash) => {
+    }).on('transactionHash', (transactionHash: string) => {
         console.log(transactionHash);
         provider.eth.accounts.wallet.clear();
-    }).on('receipt', (receipt) => {
+    }).on('receipt', (receipt: TransactionReceipt) => {
         console.log(receipt.contractAddress);
     });
 

@@ -9,11 +9,13 @@ import { join } from 'path';
 // PRISMA
 import { PrismaModule } from './prisma/prisma.module';
 
+// SOCKETS
+// import { AppGateway } from './app.gateway';
+
 // MODULES
 import { AccountModule } from './Account/account.module';
 import { ProductModule } from './Product/product.module';
 import { OwnerModule } from './Owner/owner.module';
-import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
@@ -38,6 +40,6 @@ import { AppGateway } from './app.gateway';
       }),
     }),
   ],
-  providers: [AppGateway],
+  providers: [],
 })
 export class AppModule { }

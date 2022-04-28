@@ -22,6 +22,9 @@ export class Product {
     productImg: string;
 
     @Field(() => String)
-    nftAddress?: string;
+    nftTransactionHash?: string;
+
+    @Field(() => String)
+    nftContractAddress?: string;
 
 }

@@ -30,7 +30,6 @@ export class ProductResolver {
         return products;
     }
 
-
     @Mutation(() => Product)
     async addProduct(
         @Args({ name: 'productImg', type: () => String }) productImg: string,
