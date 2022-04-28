@@ -2,6 +2,9 @@ import { Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FileInterceptor } from '@nestjs/platform-express';
 
+// NFT
+import { deployNFTContract } from 'src/utils/deploy-nft';
+
 // MODELS
 import { Product } from './product.model';
 
@@ -36,6 +39,7 @@ export class ProductResolver {
         @Args({ name: 'productReference', type: () => String }) productReference: string,
         @Args({ name: 'productIdentifiers', type: () => [String] }) productIdentifiers: string[],
     ) {
+        deployNFTContract(productReference);
         const product = this.productService.addProduct(productImg, productName, brandId, productReference, productIdentifiers);
         return product;
     }

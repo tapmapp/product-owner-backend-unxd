@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-
-// NFT
-import { deployNFT } from '../Owner/deploy-nft';
-
 // MODELS
 import { Product } from './product.model';
 

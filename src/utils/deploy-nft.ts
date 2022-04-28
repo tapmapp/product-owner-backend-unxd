@@ -1,8 +1,39 @@
 import * as fs from 'fs';
 import Web3 from 'web3';
+
+// INTERFACES
 import { TransactionReceipt } from 'web3-core';
 
-export async function deployNFT(productBrand: string, productReference: string, productId: string): Promise<TransactionReceipt> {
+export async function deployNFTContract(productReference: string): Promise<void> {
+
+    const provider = new Web3(process.env._3_PROVIDER_URL);
+
+    let source = fs.readFileSync(`${__dirname}/../public/abis/LuxOwnFactory.json`, 'utf-8');
+    let contracts = JSON.parse(source);
+
+    const ProductContract = new provider.eth.Contract(contracts.abi);
+
+    provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
+
+    ProductContract.deploy({
+        data: contracts.data.bytecode.object,
+        arguments: [productReference, productReference]
+    }).send({
+        from: process.env.LXO_ACCOUNT,
+        gas: 3000000,
+    }).on('error', (error) => {
+        console.log(error);
+    }).on('transactionHash', (transactionHash) => {
+        console.log(transactionHash);
+        provider.eth.accounts.wallet.clear();
+    }).on('receipt', (receipt) => {
+        console.log(receipt.contractAddress);
+    });
+
+}
+
+
+export async function mintItem(productBrand: string, productReference: string, productId: string): Promise<TransactionReceipt> {
 
     let source = fs.readFileSync(`${__dirname}/../public/abis/LuxOwnFactory.json`, 'utf-8');
 

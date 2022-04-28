@@ -15,6 +15,7 @@ model Product {
   productName String
   productReference String @unique
   productIdentifiers String[] 
+  nftAddress String? @unique
 }
 
 model Account {

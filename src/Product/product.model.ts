@@ -21,4 +21,7 @@ export class Product {
     @Field(() => String)
     productImg: string;
 
+    @Field(() => String)
+    nftAddress?: string;
+
 }

@@ -19,6 +19,7 @@ type Product {
   productReference: String!
   productIdentifiers: [String!]!
   productImg: String!
+  nftAddress: String!
 }
 
 type Owner {

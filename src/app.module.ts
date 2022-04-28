@@ -13,6 +13,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AccountModule } from './Account/account.module';
 import { ProductModule } from './Product/product.module';
 import { OwnerModule } from './Owner/owner.module';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
@@ -37,5 +38,6 @@ import { OwnerModule } from './Owner/owner.module';
       }),
     }),
   ],
+  providers: [AppGateway],
 })
 export class AppModule { }

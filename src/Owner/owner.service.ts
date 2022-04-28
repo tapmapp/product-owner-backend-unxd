@@ -8,7 +8,7 @@ import { Owner } from './owner.model';
 import { OwnerRepository } from './owner.repository';
 
 // NFT
-import { deployNFT } from './deploy-nft';
+import { mintItem } from '../utils/deploy-nft';
 
 @Injectable()
 export class OwnerService {
@@ -16,9 +16,7 @@ export class OwnerService {
     constructor(private ownerRepository: OwnerRepository) { }
 
     async mintNFT(brandId: string, productReference: string, productIdentifier: string): Promise<TransactionReceipt> {
-        const transactionReceipt = await deployNFT(brandId, productReference, productIdentifier);
-        console.log(transactionReceipt);
-        return transactionReceipt;
+        return await mintItem(brandId, productReference, productIdentifier);
     }
 
     async addOwner(brandId: string, productReference: string, productIdentifier: string, transactionHash: string): Promise<Owner> {
