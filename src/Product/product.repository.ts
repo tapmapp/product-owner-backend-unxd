@@ -5,6 +5,7 @@ import { Product } from './product.model';
 
 // SERVICES
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductRepository {
@@ -23,6 +24,10 @@ export class ProductRepository {
 
     public async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: string[]): Promise<Product> {
         return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productIdentifiers } });
+    }
+
+    public async updateProduct(data: Prisma.ProductUpdateInput, productReference: string): Promise<Product> {
+        return this.prisma.product.update({ where: { productReference }, data });
     }
 
     public async removeProduct(productReference: string): Promise<void> {

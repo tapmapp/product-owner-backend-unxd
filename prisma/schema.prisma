@@ -15,7 +15,7 @@ model Product {
   productName String
   productReference String @unique
   productIdentifiers String[] 
-  nftTransactionHash: String? @unique
+  nftTransactionHash String? @unique
   nftContractAddress String? @unique
 }
 

@@ -6,25 +6,30 @@ import { Product } from './product.model';
 // SERVICES
 import { ProductRepository } from './product.repository';
 
+// NFT
+import { deployNFTContract } from 'src/utils/deploy-nft';
+
 @Injectable()
 export class ProductService {
 
-    constructor(private productsRepository: ProductRepository) { }
+    constructor(private productRepository: ProductRepository) { }
 
     async getProduct(productReference: string): Promise<Product> {
-        return await this.productsRepository.getProduct(productReference);
+        return await this.productRepository.getProduct(productReference);
     }
 
     async getProducts(): Promise<Product[]> {
-        return await this.productsRepository.getProducts();
+        return await this.productRepository.getProducts();
     }
 
     async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: string[]): Promise<Product> {
-        return await this.productsRepository.addProduct(productImg, productName, brandId, productReference, productIdentifiers);
+        const addedProduct = await this.productRepository.addProduct(productImg, productName, brandId, productReference, productIdentifiers);
+        deployNFTContract(this.productRepository, productReference);
+        return addedProduct;
     }
 
     async removeProduct(productReference: string): Promise<void> {
-        await this.productsRepository.removeProduct(productReference);
+        await this.productRepository.removeProduct(productReference);
     }
 
 }

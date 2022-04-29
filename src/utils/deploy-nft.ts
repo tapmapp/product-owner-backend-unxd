@@ -1,14 +1,17 @@
 import * as fs from 'fs';
 import Web3 from 'web3';
 
+// PRODUCT REPOSITORY
+import { ProductRepository } from 'src/Product/product.repository';
+
 // INTERFACES
 import { TransactionReceipt } from 'web3-core';
 
-export async function deployNFTContract(productReference: string): Promise<void> {
+export async function deployNFTContract(productRepository: ProductRepository, productReference: string): Promise<void> {
 
     const provider = new Web3(process.env._3_PROVIDER_URL);
 
-    let source = fs.readFileSync(`${__dirname}/../public/abis/LuxOwnFactory.json`, 'utf-8');
+    let source = fs.readFileSync(`${__dirname}/../public/abis/luxown.json`, 'utf-8');
     let contracts = JSON.parse(source);
 
     const ProductContract = new provider.eth.Contract(contracts.abi);
@@ -24,10 +27,10 @@ export async function deployNFTContract(productReference: string): Promise<void>
     }).on('error', (error: Error) => {
         console.log(error);
     }).on('transactionHash', (transactionHash: string) => {
-        console.log(transactionHash);
+        productRepository.updateProduct({ nftTransactionHash: transactionHash }, productReference);
         provider.eth.accounts.wallet.clear();
     }).on('receipt', (receipt: TransactionReceipt) => {
-        console.log(receipt.contractAddress);
+        productRepository.updateProduct({ nftContractAddress: receipt.contractAddress }, productReference);
     });
 
 }
