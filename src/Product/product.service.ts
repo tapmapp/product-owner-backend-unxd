@@ -24,7 +24,7 @@ export class ProductService {
 
     async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: string[]): Promise<Product> {
         const addedProduct = await this.productRepository.addProduct(productImg, productName, brandId, productReference, productIdentifiers);
-        deployNFTContract(this.productRepository, productReference);
+        deployNFTContract(this.productRepository, addedProduct);
         return addedProduct;
     }
 

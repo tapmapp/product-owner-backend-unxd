@@ -4,33 +4,42 @@ import Web3 from 'web3';
 // PRODUCT REPOSITORY
 import { ProductRepository } from 'src/Product/product.repository';
 
+// MODELS
+import { Product } from 'src/Product/product.model';
+
 // INTERFACES
 import { TransactionReceipt } from 'web3-core';
 
-export async function deployNFTContract(productRepository: ProductRepository, productReference: string): Promise<void> {
+export async function deployNFTContract(productRepository: ProductRepository, product: Product): Promise<void> {
 
     const provider = new Web3(process.env._3_PROVIDER_URL);
 
-    let source = fs.readFileSync(`${__dirname}/../public/abis/luxown.json`, 'utf-8');
+    let source = fs.readFileSync(`${__dirname}/../static/abis/luxown.json`, 'utf-8');
     let contracts = JSON.parse(source);
 
-    const ProductContract = new provider.eth.Contract(contracts.abi);
+    const abi = contracts.output.contracts['contracts/factoryV2.sol'].LuxOwn.abi;
+
+    const ProductContract = new provider.eth.Contract(abi);
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
 
+    const bytecode = contracts.output.contracts['contracts/factoryV2.sol'].LuxOwn.evm.bytecode.object;
+
     ProductContract.deploy({
-        data: contracts.data.bytecode.object,
-        arguments: [productReference, productReference]
+        data: '0x' + bytecode,
+        arguments: [product.productReference],
     }).send({
         from: process.env.LXO_ACCOUNT,
         gas: 3000000,
     }).on('error', (error: Error) => {
         console.log(error);
     }).on('transactionHash', (transactionHash: string) => {
-        productRepository.updateProduct({ nftTransactionHash: transactionHash }, productReference);
+        console.log(transactionHash)
+        productRepository.updateProduct({ nftTransactionHash: transactionHash }, product.id);
         provider.eth.accounts.wallet.clear();
     }).on('receipt', (receipt: TransactionReceipt) => {
-        productRepository.updateProduct({ nftContractAddress: receipt.contractAddress }, productReference);
+        console.log(receipt.contractAddress);
+        productRepository.updateProduct({ nftContractAddress: receipt.contractAddress }, product.id);
     });
 
 }
@@ -38,7 +47,7 @@ export async function deployNFTContract(productRepository: ProductRepository, pr
 
 export async function mintItem(productBrand: string, productReference: string, productId: string): Promise<TransactionReceipt> {
 
-    let source = fs.readFileSync(`${__dirname}/../public/abis/LuxOwnFactory.json`, 'utf-8');
+    let source = fs.readFileSync(`${__dirname}/../static/abis/LuxOwnFactory.json`, 'utf-8');
 
     let contracts = JSON.parse(source);
 

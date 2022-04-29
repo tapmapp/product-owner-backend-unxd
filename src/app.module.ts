@@ -29,7 +29,7 @@ import { OwnerModule } from './Owner/owner.module';
       driver: ApolloDriver,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', 'static'),
     }),
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],

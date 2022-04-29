@@ -26,8 +26,8 @@ export class ProductRepository {
         return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productIdentifiers } });
     }
 
-    public async updateProduct(data: Prisma.ProductUpdateInput, productReference: string): Promise<Product> {
-        return this.prisma.product.update({ where: { productReference }, data });
+    public async updateProduct(data: Prisma.ProductUpdateInput, productId: string): Promise<Product> {
+        return this.prisma.product.update({ where: { id: productId }, data });
     }
 
     public async removeProduct(productReference: string): Promise<void> {

@@ -21,10 +21,10 @@ export class Product {
     @Field(() => String)
     productImg: string;
 
-    @Field(() => String)
+    @Field(() => String, { nullable: true })
     nftTransactionHash?: string;
 
-    @Field(() => String)
+    @Field(() => String, { nullable: true })
     nftContractAddress?: string;
 
 }
