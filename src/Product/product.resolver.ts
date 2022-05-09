@@ -2,9 +2,8 @@ import { Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-
 // MODELS
-import { Product } from './product.model';
+import { Product, TransactionReceipt } from './product.model';
 
 // SERVICES
 import { ProductService } from './product.service';
@@ -36,9 +35,17 @@ export class ProductResolver {
         @Args({ name: 'productReference', type: () => String }) productReference: string,
         @Args({ name: 'productIdentifiers', type: () => [String] }) productIdentifiers: string[],
     ) {
-
         const product = this.productService.addProduct(productImg, productName, brandId, productReference, productIdentifiers);
         return product;
+    }
+
+    @Mutation(() => Boolean)
+    async mintNFT(
+        @Args({ name: 'address', type: () => String }) address: string,
+        @Args({ name: 'mintData', type: () => String }) mintData: string,
+    ): Promise<TransactionReceipt> {
+        const transactionReceipt = await this.productService.mintNFT(address, mintData);
+        return true;
     }
 
     @Mutation(() => Boolean)

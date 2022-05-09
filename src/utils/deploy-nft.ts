@@ -44,10 +44,9 @@ export async function deployNFTContract(productRepository: ProductRepository, pr
 
 }
 
+export async function generateNFT(productRepository: ProductRepository, product: Product): Promise<void> {
 
-export async function mintItem(productBrand: string, productReference: string, productId: string): Promise<TransactionReceipt> {
-
-    let source = fs.readFileSync(`${__dirname}/../static/abis/LuxOwnFactory.json`, 'utf-8');
+    let source = fs.readFileSync(`${__dirname}/../static/abis/luxown.json`, 'utf-8');
 
     let contracts = JSON.parse(source);
 
@@ -56,11 +55,53 @@ export async function mintItem(productBrand: string, productReference: string, p
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
 
-    const tx = LXOContract.methods.createNew(
-        Web3.utils.keccak256(productBrand),
-        Web3.utils.keccak256(productReference),
-        Web3.utils.keccak256(productId)
-    );
+    const tx = LXOContract.methods.createNew(product.productReference);
+    const gas = await tx.estimateGas({ from: process.env.LXO_ACCOUNT });
+
+    const gasPrice = await provider.eth.getGasPrice();
+    const data = tx.encodeABI();
+
+    const txData = {
+        from: process.env.LXO_ACCOUNT,
+        to: process.env.LXO_FACTORY_ADDRESS,
+        data: data,
+        gas,
+        gasPrice,
+    };
+
+    try {
+        provider.eth.sendTransaction(txData).on('transactionHash', async (transactionHash: string) => {
+            console.log('TRANSACTION SENT!');
+            provider.eth.accounts.wallet.clear();
+            await productRepository.updateProduct({ nftTransactionHash: transactionHash }, product.id);
+        }).on('receipt', async (receipt: TransactionReceipt) => {
+            console.log('TRANSACTION COMPLETED!');
+            console.log(receipt);
+            await productRepository.updateProduct({ nftContractAddress: receipt.logs[0].address }, product.id);
+        });
+    } catch (error) {
+        console.log('THERE WAS AN ERROR SENDING YOUR TRANSACTION!')
+        console.log(error);
+    }
+
+}
+
+const checkTransaction = (provider, txHash) => {
+    provider.eth.getTransaction(txHash).then(console.log);
+}
+
+export async function mintItem(address: string, mintData: string): Promise<TransactionReceipt> {
+
+    let source = fs.readFileSync(`${__dirname}/../public/abis/LuxOwnFactory.json`, 'utf-8');
+
+    let contracts = JSON.parse(source);
+
+    const provider = new Web3(process.env._3_PROVIDER_URL);
+    const LXOContract = new provider.eth.Contract(contracts.abi, process.env.LXO_FACTORY_ADDRESS);
+
+    provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
+
+    const tx = LXOContract.methods.createNew(address, mintData);
     const gas = await tx.estimateGas({ from: process.env.LXO_ACCOUNT });
 
     const gasPrice = await provider.eth.getGasPrice();
@@ -75,9 +116,15 @@ export async function mintItem(productBrand: string, productReference: string, p
     };
 
     try {
-        const receipt = await provider.eth.sendTransaction(txData);
-        provider.eth.accounts.wallet.clear();
-        console.log('TRANSACTION SENT!');
+        const receipt = await provider.eth.sendTransaction(txData).on('transactionHash', async (transactionHash: string) => {
+            console.log('TRANSACTION SENT!');
+            provider.eth.accounts.wallet.clear();
+            //await productRepository.updateProduct({ nftTransactionHash: transactionHash }, product.id);
+        }).on('receipt', async (receipt: TransactionReceipt) => {
+            console.log('TRANSACTION COMPLETED!');
+            console.log(receipt);
+            //await productRepository.updateProduct({ nftContractAddress: receipt.logs[0].address }, product.id);
+        });
         return receipt;
     } catch (error) {
         console.log('THERE WAS AN ERROR SENDING YOUR TRANSACTION!')

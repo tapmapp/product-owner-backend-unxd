@@ -23,14 +23,6 @@ type Product {
   nftContractAddress: String
 }
 
-type Owner {
-  id: String!
-  brandId: String!
-  productReference: String!
-  productIdentifier: String!
-  transactionHash: String!
-}
-
 type Query {
   getAccount(accountEmail: String!): Account!
   getAccounts: [Account!]!
@@ -43,6 +35,6 @@ type Mutation {
   signIn(accountEmail: String!, accountPassword: String!, accountName: String!): Account!
   removeAccount(accountEmail: String!): Boolean!
   addProduct(productImg: String!, productName: String!, brandId: String!, productReference: String!, productIdentifiers: [String!]!): Product!
+  mintNFT(address: String!, mintData: String!): Boolean!
   removeProduct(productReference: String!): Boolean!
-  mintNFT(brandId: String!, productReference: String!, productIdentifier: String!): Owner!
 }

@@ -28,3 +28,8 @@ export class Product {
     nftContractAddress?: string;
 
 }
+
+@ObjectType()
+export class TransactionReceipt {
+
+}
