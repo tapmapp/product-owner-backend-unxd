@@ -10,7 +10,7 @@ import { ProductRepository } from './product.repository';
 import { TransactionReceipt } from 'web3-core';
 
 // NFT
-import { generateNFT, mintItem } from 'src/utils/deploy-nft';
+import { generateNFT, getNFT, mintProductItem } from 'src/utils/deploy-nft';
 
 @Injectable()
 export class ProductService {
@@ -25,14 +25,18 @@ export class ProductService {
         return await this.productRepository.getProducts();
     }
 
+    async getNFT(contractAddress: string, tokenId: string): Promise<any> {
+        await getNFT(contractAddress, tokenId);
+    }
+
     async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: string[]): Promise<Product> {
         const addedProduct = await this.productRepository.addProduct(productImg, productName, brandId, productReference, productIdentifiers);
         await generateNFT(this.productRepository, addedProduct);
         return await this.productRepository.getProduct(addedProduct.productReference);
     }
 
-    async mintNFT(address: string, mintData: string): Promise<TransactionReceipt> {
-        return await mintItem(address, mintData);
+    async mintProductItem(address: string, tokenUri: string): Promise<TransactionReceipt> {
+        return await mintProductItem(address, tokenUri);
     }
 
     async removeProduct(productReference: string): Promise<void> {

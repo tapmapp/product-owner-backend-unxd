@@ -1,6 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
+export class ProductItem {
+
+    @Field(() => String)
+    id: string;
+
+}
+
+@ObjectType()
 export class Product {
 
     @Field(() => String)
@@ -26,10 +34,5 @@ export class Product {
 
     @Field(() => String, { nullable: true })
     nftContractAddress?: string;
-
-}
-
-@ObjectType()
-export class TransactionReceipt {
 
 }

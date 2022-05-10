@@ -8,7 +8,7 @@ import { Owner } from './owner.model';
 import { OwnerRepository } from './owner.repository';
 
 // NFT
-import { mintItem } from '../utils/deploy-nft';
+// import { mintItem } from '../utils/deploy-nft';
 
 @Injectable()
 export class OwnerService {

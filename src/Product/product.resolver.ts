@@ -3,7 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 // MODELS
-import { Product, TransactionReceipt } from './product.model';
+import { Product } from './product.model';
 
 // SERVICES
 import { ProductService } from './product.service';
@@ -19,6 +19,17 @@ export class ProductResolver {
     ): Promise<Product> {
         const product = await this.productService.getProduct(productReference);
         return product;
+    }
+
+    @Query(() => Boolean)
+    async getNFT(
+        @Args('contractAddress') contractAddress: string,
+        @Args('tokenId') tokenId: string
+    ): Promise<any> {
+        const nft = await this.productService.getNFT(contractAddress, tokenId);
+        console.log(nft);
+        return true;
+        // 0x4419bdd879a6cd31672d3a4a490eb593147c01e8?a=0
     }
 
     @Query(() => [Product])
@@ -40,11 +51,12 @@ export class ProductResolver {
     }
 
     @Mutation(() => Boolean)
-    async mintNFT(
-        @Args({ name: 'address', type: () => String }) address: string,
-        @Args({ name: 'mintData', type: () => String }) mintData: string,
-    ): Promise<TransactionReceipt> {
-        const transactionReceipt = await this.productService.mintNFT(address, mintData);
+    async mintProductItem(
+        @Args({ name: 'ownerAddress', type: () => String }) ownerAddress: string,
+        @Args({ name: 'tokenUri', type: () => String }) tokenUri: string,
+    ): Promise<Boolean> {
+        const transactionReceipt = await this.productService.mintProductItem(ownerAddress, tokenUri);
+        console.log(transactionReceipt);
         return true;
     }
 

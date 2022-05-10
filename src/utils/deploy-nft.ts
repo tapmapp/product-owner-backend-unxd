@@ -1,6 +1,9 @@
 import * as fs from 'fs';
 import Web3 from 'web3';
 
+// WEB3 PROVIDER
+import { provider } from '../provider';
+
 // PRODUCT REPOSITORY
 import { ProductRepository } from 'src/Product/product.repository';
 
@@ -11,8 +14,6 @@ import { Product } from 'src/Product/product.model';
 import { TransactionReceipt } from 'web3-core';
 
 export async function deployNFTContract(productRepository: ProductRepository, product: Product): Promise<void> {
-
-    const provider = new Web3(process.env._3_PROVIDER_URL);
 
     let source = fs.readFileSync(`${__dirname}/../static/abis/luxown.json`, 'utf-8');
     let contracts = JSON.parse(source);
@@ -46,12 +47,13 @@ export async function deployNFTContract(productRepository: ProductRepository, pr
 
 export async function generateNFT(productRepository: ProductRepository, product: Product): Promise<void> {
 
-    let source = fs.readFileSync(`${__dirname}/../static/abis/luxown.json`, 'utf-8');
+    let source = fs.readFileSync(`${__dirname}${process.env.LXO_FACTORY_ABI}`, 'utf-8');
 
     let contracts = JSON.parse(source);
 
+    const abi = contracts.output.contracts['contracts/Factory.sol'].LuxOwnFactory.abi;
     const provider = new Web3(process.env._3_PROVIDER_URL);
-    const LXOContract = new provider.eth.Contract(contracts.abi, process.env.LXO_FACTORY_ADDRESS);
+    const LXOContract = new provider.eth.Contract(abi, process.env.LXO_FACTORY_ADDRESS);
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
 
@@ -90,14 +92,15 @@ const checkTransaction = (provider, txHash) => {
     provider.eth.getTransaction(txHash).then(console.log);
 }
 
-export async function mintItem(address: string, mintData: string): Promise<TransactionReceipt> {
+export async function mintProductItem(address: string, mintData: string): Promise<TransactionReceipt> {
 
-    let source = fs.readFileSync(`${__dirname}/../public/abis/LuxOwnFactory.json`, 'utf-8');
+    let source = fs.readFileSync(`${__dirname}${process.env.LXO_FACTORY_ABI}`, 'utf-8');
 
     let contracts = JSON.parse(source);
 
-    const provider = new Web3(process.env._3_PROVIDER_URL);
-    const LXOContract = new provider.eth.Contract(contracts.abi, process.env.LXO_FACTORY_ADDRESS);
+    const abi = contracts.output.contracts['contracts/Owner.sol'].LuxOwn.abi;
+
+    const LXOContract = new provider.eth.Contract(abi, process.env.LXO_FACTORY_ADDRESS);
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
 
@@ -116,19 +119,27 @@ export async function mintItem(address: string, mintData: string): Promise<Trans
     };
 
     try {
+
         const receipt = await provider.eth.sendTransaction(txData).on('transactionHash', async (transactionHash: string) => {
             console.log('TRANSACTION SENT!');
+            console.log(transactionHash);
             provider.eth.accounts.wallet.clear();
-            //await productRepository.updateProduct({ nftTransactionHash: transactionHash }, product.id);
+            // await productRepository.updateProduct({ nftTransactionHash: transactionHash }, product.id);
         }).on('receipt', async (receipt: TransactionReceipt) => {
             console.log('TRANSACTION COMPLETED!');
             console.log(receipt);
-            //await productRepository.updateProduct({ nftContractAddress: receipt.logs[0].address }, product.id);
+            // await productRepository.updateProduct({ nftContractAddress: receipt.logs[0].address }, product.id);
         });
+
         return receipt;
+
     } catch (error) {
         console.log('THERE WAS AN ERROR SENDING YOUR TRANSACTION!')
         console.log(error);
     }
+
+}
+
+export function getNFT(contractAddress: string, tokenId: string) {
 
 }
