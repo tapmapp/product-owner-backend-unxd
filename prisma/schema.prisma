@@ -21,7 +21,7 @@ model Product {
 
 model ProductItem {
   id String @id @default(uuid())
-  tokenId? Number
+  tokenId Int?
   transactionHash String? @unique
 }
 

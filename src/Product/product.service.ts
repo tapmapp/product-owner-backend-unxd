@@ -21,6 +21,10 @@ export class ProductService {
         return await this.productRepository.getProduct(productReference);
     }
 
+    async getProductItem(productItemId: string): Promise<ProductItem> {
+        return await this.productRepository.getProductItem(productItemId);
+    }
+
     async getProducts(): Promise<Product[]> {
         return await this.productRepository.getProducts();
     }

@@ -1,4 +1,18 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
+
+@InputType()
+export class ProductItemInput {
+
+    @Field(() => String)
+    id: string;
+
+    @Field(() => Number, { nullable: true })
+    tokenId?: number;
+
+    @Field(() => String, { nullable: true })
+    transactionHash?: string;
+
+}
 
 @ObjectType()
 export class ProductItem {
@@ -6,8 +20,8 @@ export class ProductItem {
     @Field(() => String)
     id: string;
 
-    @Field(() => Number)
-    tokenId: number;
+    @Field(() => Number, { nullable: true })
+    tokenId?: number;
 
     @Field(() => String, { nullable: true })
     transactionHash?: string;

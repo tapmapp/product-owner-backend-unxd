@@ -12,6 +12,12 @@ type Account {
   role: String!
 }
 
+type ProductItem {
+  id: String!
+  tokenId: Float
+  transactionHash: String
+}
+
 type Product {
   id: String!
   productName: String!
@@ -28,6 +34,7 @@ type Query {
   getAccounts: [Account!]!
   logIn(accountEmail: String!, accountPassword: String!): Account!
   getProduct(productReference: String!): Product!
+  getProductItem(productItemId: String!): ProductItem!
   getNFT(contractAddress: String!, tokenId: String!): Boolean!
   getProducts: [Product!]!
 }
@@ -35,7 +42,13 @@ type Query {
 type Mutation {
   signIn(accountEmail: String!, accountPassword: String!, accountName: String!): Account!
   removeAccount(accountEmail: String!): Boolean!
-  addProduct(productImg: String!, productName: String!, brandId: String!, productReference: String!, productIdentifiers: [String!]!): Product!
+  addProduct(productImg: String!, productName: String!, brandId: String!, productReference: String!, productIdentifiers: [ProductItemInput!]!): Product!
   mintProductItem(ownerAddress: String!, tokenUri: String!): Boolean!
   removeProduct(productReference: String!): Boolean!
+}
+
+input ProductItemInput {
+  id: String!
+  tokenId: Float
+  transactionHash: String
 }

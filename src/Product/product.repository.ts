@@ -22,12 +22,18 @@ export class ProductRepository {
         });
     }
 
+    public async getProductItem(productItemId: string): Promise<ProductItem> {
+        return this.prisma.productItem.findFirst({
+            where: { id: productItemId },
+        });
+    }
+
     public async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: string[]): Promise<Product> {
         return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productIdentifiers } });
     }
 
     public addProductItems(productItems: ProductItem[]) {
-        return this.prisma.productItem.addMany()
+        //return this.prisma.productItem.addMany()
     }
 
     public async updateProduct(data: Prisma.ProductUpdateInput, productId: string): Promise<Product> {

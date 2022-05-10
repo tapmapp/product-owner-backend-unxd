@@ -3,7 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 // MODELS
-import { Product, ProductItem } from './product.model';
+import { Product, ProductItem, ProductItemInput } from './product.model';
 
 // SERVICES
 import { ProductService } from './product.service';
@@ -19,6 +19,14 @@ export class ProductResolver {
     ): Promise<Product> {
         const product = await this.productService.getProduct(productReference);
         return product;
+    }
+
+    @Query(() => ProductItem)
+    async getProductItem(
+        @Args('productItemId') productItemId: string
+    ): Promise<ProductItem> {
+        const productItem = await this.productService.getProductItem(productItemId);
+        return productItem;
     }
 
     @Query(() => Boolean)
@@ -44,7 +52,7 @@ export class ProductResolver {
         @Args({ name: 'productName', type: () => String }) productName: string,
         @Args({ name: 'brandId', type: () => String }) brandId: string,
         @Args({ name: 'productReference', type: () => String }) productReference: string,
-        @Args({ name: 'productIdentifiers', type: () => [ProductItem] }) productIdentifiers: ProductItem[],
+        @Args({ name: 'productIdentifiers', type: () => [ProductItemInput] }) productIdentifiers: ProductItemInput[],
     ) {
         const product = this.productService.addProduct(productImg, productName, brandId, productReference, productIdentifiers);
         return product;
