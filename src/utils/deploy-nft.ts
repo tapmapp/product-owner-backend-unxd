@@ -104,7 +104,7 @@ export async function mintProductItem(address: string, mintData: string): Promis
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
 
-    const tx = LXOContract.methods.createNew(address, mintData);
+    const tx = LXOContract.methods.createItem(address, mintData);
     const gas = await tx.estimateGas({ from: process.env.LXO_ACCOUNT });
 
     const gasPrice = await provider.eth.getGasPrice();
@@ -121,14 +121,16 @@ export async function mintProductItem(address: string, mintData: string): Promis
     try {
 
         const receipt = await provider.eth.sendTransaction(txData).on('transactionHash', async (transactionHash: string) => {
-            console.log('TRANSACTION SENT!');
+            console.log('MINT ITEM TRANSACTION SENT!');
             console.log(transactionHash);
             provider.eth.accounts.wallet.clear();
             // await productRepository.updateProduct({ nftTransactionHash: transactionHash }, product.id);
         }).on('receipt', async (receipt: TransactionReceipt) => {
-            console.log('TRANSACTION COMPLETED!');
+            console.log('MINT ITEM TRANSACTION COMPLETED!');
             console.log(receipt);
             // await productRepository.updateProduct({ nftContractAddress: receipt.logs[0].address }, product.id);
+        }).on('error', (error: any) => {
+            console.log(error);
         });
 
         return receipt;
