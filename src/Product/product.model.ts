@@ -6,6 +6,12 @@ export class ProductItem {
     @Field(() => String)
     id: string;
 
+    @Field(() => Number)
+    tokenId: number;
+
+    @Field(() => String, { nullable: true })
+    transactionHash?: string;
+
 }
 
 @ObjectType()

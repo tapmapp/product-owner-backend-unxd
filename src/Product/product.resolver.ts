@@ -3,7 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 // MODELS
-import { Product } from './product.model';
+import { Product, ProductItem } from './product.model';
 
 // SERVICES
 import { ProductService } from './product.service';
@@ -44,7 +44,7 @@ export class ProductResolver {
         @Args({ name: 'productName', type: () => String }) productName: string,
         @Args({ name: 'brandId', type: () => String }) brandId: string,
         @Args({ name: 'productReference', type: () => String }) productReference: string,
-        @Args({ name: 'productIdentifiers', type: () => [String] }) productIdentifiers: string[],
+        @Args({ name: 'productIdentifiers', type: () => [ProductItem] }) productIdentifiers: ProductItem[],
     ) {
         const product = this.productService.addProduct(productImg, productName, brandId, productReference, productIdentifiers);
         return product;

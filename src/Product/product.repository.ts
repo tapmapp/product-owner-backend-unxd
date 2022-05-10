@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 // MODELS
-import { Product } from './product.model';
+import { Product, ProductItem } from './product.model';
 
 // SERVICES
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -24,6 +24,10 @@ export class ProductRepository {
 
     public async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: string[]): Promise<Product> {
         return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productIdentifiers } });
+    }
+
+    public addProductItems(productItems: ProductItem[]) {
+        return this.prisma.productItem.addMany()
     }
 
     public async updateProduct(data: Prisma.ProductUpdateInput, productId: string): Promise<Product> {
