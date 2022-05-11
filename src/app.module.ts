@@ -28,9 +28,6 @@ import { OwnerModule } from './Owner/owner.module';
       autoSchemaFile: 'schema.gql',
       driver: ApolloDriver,
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'static'),
-    }),
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

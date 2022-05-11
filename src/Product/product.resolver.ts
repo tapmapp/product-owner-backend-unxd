@@ -23,21 +23,10 @@ export class ProductResolver {
 
     @Query(() => ProductItem)
     async getProductItem(
-        @Args('productItemId') productItemId: string
+        @Args('productIdentifier') productIdentifier: string
     ): Promise<ProductItem> {
-        const productItem = await this.productService.getProductItem(productItemId);
+        const productItem = await this.productService.getProductItem(productIdentifier);
         return productItem;
-    }
-
-    @Query(() => Boolean)
-    async getNFT(
-        @Args('contractAddress') contractAddress: string,
-        @Args('tokenId') tokenId: string
-    ): Promise<any> {
-        const nft = await this.productService.getNFT(contractAddress, tokenId);
-        console.log(nft);
-        return true;
-        // 0x4419bdd879a6cd31672d3a4a490eb593147c01e8?a=0
     }
 
     @Query(() => [Product])
@@ -61,11 +50,11 @@ export class ProductResolver {
     @Mutation(() => Boolean)
     async mintProductItem(
         @Args({ name: 'ownerAddress', type: () => String }) ownerAddress: string,
+        @Args({ name: 'productItemId', type: () => String }) productItemId: string,
+        @Args({ name: 'productIdentifier', type: () => String }) productIdentifier: string,
         @Args({ name: 'tokenUri', type: () => String }) tokenUri: string,
-    ): Promise<Boolean> {
-        const transactionReceipt = await this.productService.mintProductItem(ownerAddress, tokenUri);
-        console.log(transactionReceipt);
-        return true;
+    ): Promise<void> {
+        await this.productService.mintProductItem(ownerAddress, productItemId, productIdentifier, tokenUri)
     }
 
     @Mutation(() => Boolean)

@@ -52,7 +52,7 @@ export async function generateNFT(productRepository: ProductRepository, product:
     let contracts = JSON.parse(source);
 
     const abi = contracts.output.contracts['contracts/Factory.sol'].LuxOwnFactory.abi;
-    const provider = new Web3(process.env._3_PROVIDER_URL);
+
     const LXOContract = new provider.eth.Contract(abi, process.env.LXO_FACTORY_ADDRESS);
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
@@ -71,28 +71,21 @@ export async function generateNFT(productRepository: ProductRepository, product:
         gasPrice,
     };
 
-    try {
-        provider.eth.sendTransaction(txData).on('transactionHash', async (transactionHash: string) => {
-            console.log('TRANSACTION SENT!');
-            provider.eth.accounts.wallet.clear();
-            await productRepository.updateProduct({ nftTransactionHash: transactionHash }, product.id);
-        }).on('receipt', async (receipt: TransactionReceipt) => {
-            console.log('TRANSACTION COMPLETED!');
-            console.log(receipt);
-            await productRepository.updateProduct({ nftContractAddress: receipt.logs[0].address }, product.id);
-        });
-    } catch (error) {
-        console.log('THERE WAS AN ERROR SENDING YOUR TRANSACTION!')
+    provider.eth.sendTransaction(txData).on('transactionHash', async (transactionHash: string) => {
+        console.log('TRANSACTION SENT!');
+        provider.eth.accounts.wallet.clear();
+        await productRepository.updateProduct({ nftTransactionHash: transactionHash }, product.id);
+    }).on('receipt', async (receipt: TransactionReceipt) => {
+        console.log('TRANSACTION COMPLETED!');
+        await productRepository.updateProduct({ nftContractAddress: receipt.logs[0].address }, product.id);
+    }).on('error', (error: Error) => {
+        console.log('THERE WAS AN ERROR SENDING YOUR TRANSACTION!');
         console.log(error);
-    }
+    });
 
 }
 
-const checkTransaction = (provider, txHash) => {
-    provider.eth.getTransaction(txHash).then(console.log);
-}
-
-export async function mintProductItem(address: string, mintData: string): Promise<TransactionReceipt> {
+export async function mintProductItem(productRepository: ProductRepository, ownerAddress: string, productItemId: string, productIdentifier: string, mintData: string): Promise<void> {
 
     let source = fs.readFileSync(`${__dirname}${process.env.LXO_FACTORY_ABI}`, 'utf-8');
 
@@ -104,7 +97,7 @@ export async function mintProductItem(address: string, mintData: string): Promis
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
 
-    const tx = LXOContract.methods.createItem(address, mintData);
+    const tx = LXOContract.methods.createItem(ownerAddress, productIdentifier, mintData);
     const gas = await tx.estimateGas({ from: process.env.LXO_ACCOUNT });
 
     const gasPrice = await provider.eth.getGasPrice();
@@ -118,30 +111,21 @@ export async function mintProductItem(address: string, mintData: string): Promis
         gasPrice,
     };
 
-    try {
+    provider.eth.sendTransaction(txData).on('transactionHash', async (transactionHash: string) => {
 
-        const receipt = await provider.eth.sendTransaction(txData).on('transactionHash', async (transactionHash: string) => {
-            console.log('MINT ITEM TRANSACTION SENT!');
-            console.log(transactionHash);
-            provider.eth.accounts.wallet.clear();
-            // await productRepository.updateProduct({ nftTransactionHash: transactionHash }, product.id);
-        }).on('receipt', async (receipt: TransactionReceipt) => {
-            console.log('MINT ITEM TRANSACTION COMPLETED!');
-            console.log(receipt);
-            // await productRepository.updateProduct({ nftContractAddress: receipt.logs[0].address }, product.id);
-        }).on('error', (error: any) => {
-            console.log(error);
-        });
+        console.log('MINT ITEM TRANSACTION SENT!');
+        provider.eth.accounts.wallet.clear();
+        await productRepository.updateProductItem({ transactionHash }, productItemId);
 
-        return receipt;
+    }).on('receipt', async (receipt: TransactionReceipt) => {
 
-    } catch (error) {
-        console.log('THERE WAS AN ERROR SENDING YOUR TRANSACTION!')
+        console.log('MINT ITEM TRANSACTION COMPLETED!');
+        console.log(receipt);
+        // await productRepository.updateProductItem({ transactionHash }, productItemId);
+
+    }).on('error', (error: Error) => {
+        console.log('THERE WAS AN ERROR SENDING YOUR TRANSACTION!');
         console.log(error);
-    }
-
-}
-
-export function getNFT(contractAddress: string, tokenId: string) {
+    });
 
 }

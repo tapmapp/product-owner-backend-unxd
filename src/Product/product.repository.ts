@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma, PrismaPromise } from '@prisma/client';
 
 // MODELS
-import { Product, ProductItem } from './product.model';
+import { Product, ProductItem, ProductItemInput } from './product.model';
 
 // SERVICES
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductRepository {
@@ -22,9 +22,9 @@ export class ProductRepository {
         });
     }
 
-    public async getProductItem(productItemId: string): Promise<ProductItem> {
+    public async getProductItem(productIdentifier: string): Promise<ProductItem> {
         return this.prisma.productItem.findFirst({
-            where: { id: productItemId },
+            where: { productIdentifier },
         });
     }
 
@@ -32,12 +32,16 @@ export class ProductRepository {
         return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productIdentifiers } });
     }
 
-    public addProductItems(productItems: ProductItem[]) {
-        //return this.prisma.productItem.addMany()
+    public addProductItems(productItems: ProductItemInput[]): PrismaPromise<Prisma.BatchPayload> {
+        return this.prisma.productItem.createMany({ data: productItems });
     }
 
     public async updateProduct(data: Prisma.ProductUpdateInput, productId: string): Promise<Product> {
         return this.prisma.product.update({ where: { id: productId }, data });
+    }
+
+    public async updateProductItem(data: Prisma.ProductItemUpdateInput, productItemId: string): Promise<ProductItem> {
+        return this.prisma.productItem.update({ where: { id: productItemId }, data });
     }
 
     public async removeProduct(productReference: string): Promise<void> {

@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
 // MODELS
-import { Product, ProductItem } from './product.model';
+import { Product, ProductItem, ProductItemInput } from './product.model';
 
 // SERVICES
 import { ProductRepository } from './product.repository';
 
-// INTERFACES
-import { TransactionReceipt } from 'web3-core';
-
 // NFT
-import { generateNFT, getNFT, mintProductItem } from 'src/utils/deploy-nft';
+import { generateNFT, mintProductItem } from 'src/utils/deploy-nft';
 
 @Injectable()
 export class ProductService {
@@ -21,27 +18,28 @@ export class ProductService {
         return await this.productRepository.getProduct(productReference);
     }
 
-    async getProductItem(productItemId: string): Promise<ProductItem> {
-        return await this.productRepository.getProductItem(productItemId);
+    async getProductItem(productIdentifier: string): Promise<ProductItem> {
+        return await this.productRepository.getProductItem(productIdentifier);
     }
 
     async getProducts(): Promise<Product[]> {
         return await this.productRepository.getProducts();
     }
 
-    async getNFT(contractAddress: string, tokenId: string): Promise<any> {
-        await getNFT(contractAddress, tokenId);
-    }
+    async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: ProductItemInput[]): Promise<Product> {
 
-    async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: ProductItem[]): Promise<Product> {
-        const productIdentifiersIds = productIdentifiers.map(productIdentifier => productIdentifier.id);
-        const addedProduct = await this.productRepository.addProduct(productImg, productName, brandId, productReference, productIdentifiersIds);
+        const productItemsIdentifiers = productIdentifiers.map(productIdentifier => productIdentifier.productIdentifier);
+        const addedProduct = await this.productRepository.addProduct(productImg, productName, brandId, productReference, productItemsIdentifiers);
+
+        await this.productRepository.addProductItems(productIdentifiers);
         await generateNFT(this.productRepository, addedProduct);
+
         return await this.productRepository.getProduct(addedProduct.productReference);
+
     }
 
-    async mintProductItem(address: string, tokenUri: string): Promise<TransactionReceipt> {
-        return await mintProductItem(address, tokenUri);
+    async mintProductItem(ownerAddress: string, productItemId: string, productIdentifier: string, tokenUri: string): Promise<void> {
+        await mintProductItem(this.productRepository, ownerAddress, productItemId, productIdentifier, tokenUri);
     }
 
     async removeProduct(productReference: string): Promise<void> {
