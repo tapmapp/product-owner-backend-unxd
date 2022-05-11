@@ -33,18 +33,17 @@ export class ProductService {
 
     async addProduct(productImg: string, productName: string, brandId: string, productReference: string, productIdentifiers: ProductItemInput[]): Promise<Product> {
 
-        const productItemsIds = productIdentifiers.map(productIdentifier => crypto.randomUUID());
-        const addedProduct = await this.productRepository.addProduct(productImg, productName, brandId, productReference, productItemsIds);
+        const productItemsIdentifiers = productIdentifiers.map(productIdentifier => productIdentifier.productIdentifier);
+        const addedProduct = await this.productRepository.addProduct(productImg, productName, brandId, productReference, productItemsIdentifiers);
 
-        const productItemsWithIDs = productIdentifiers.map((productIdentifier: ProductItemInput, i: number) => {
+        const productItems = productIdentifiers.map((productIdentifier: ProductItemInput, i: number) => {
             return {
-                id: productItemsIds[i],
                 productIdentifier: productIdentifier.productIdentifier,
                 productId: addedProduct.id
             }
         });
 
-        await this.productRepository.addProductItems(productItemsWithIDs);
+        await this.productRepository.addProductItems(productItems);
         await generateNFT(this.productRepository, addedProduct);
 
         return await this.productRepository.getProduct(addedProduct.productReference);

@@ -17,6 +17,7 @@ type ProductItem {
   productIdentifier: String!
   tokenId: Float
   transactionHash: String
+  productId: String!
 }
 
 type Product {

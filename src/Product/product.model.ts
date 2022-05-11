@@ -6,6 +6,9 @@ export class ProductItemInput {
     @Field(() => String)
     productIdentifier: string;
 
+    @Field(() => String)
+    productId: string;
+
     @Field(() => Number, { nullable: true })
     tokenId?: number;
 
@@ -23,14 +26,14 @@ export class ProductItem {
     @Field(() => String)
     productIdentifier: string;
 
+    @Field(() => String)
+    productId: string;
+
     @Field(() => Number, { nullable: true })
     tokenId?: number;
 
     @Field(() => String, { nullable: true })
     transactionHash?: string;
-
-    @Field(() => String)
-    productId: string;
 
 }
 
