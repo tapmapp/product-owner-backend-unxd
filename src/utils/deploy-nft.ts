@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import Web3 from 'web3';
+
 
 // WEB3 PROVIDER
 import { provider } from '../provider';
@@ -57,7 +57,7 @@ export async function generateNFT(productRepository: ProductRepository, product:
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
 
-    const tx = LXOContract.methods.createNew(product.productReference);
+    const tx = LXOContract.methods.createNew(product.productReference, process.env.LXO_ACCOUNT);
     const gas = await tx.estimateGas({ from: process.env.LXO_ACCOUNT });
 
     const gasPrice = await provider.eth.getGasPrice();
@@ -85,7 +85,7 @@ export async function generateNFT(productRepository: ProductRepository, product:
 
 }
 
-export async function mintProductItem(productRepository: ProductRepository, ownerAddress: string, productItemId: string, productIdentifier: string, mintData: string): Promise<void> {
+export async function mintProductItem(productRepository: ProductRepository, ownerAddress: string, productId: string, productReference: string, productIdentifier: string, mintData: string): Promise<void> {
 
     let source = fs.readFileSync(`${__dirname}${process.env.LXO_FACTORY_ABI}`, 'utf-8');
 
@@ -93,11 +93,13 @@ export async function mintProductItem(productRepository: ProductRepository, owne
 
     const abi = contracts.output.contracts['contracts/Owner.sol'].LuxOwn.abi;
 
-    const LXOContract = new provider.eth.Contract(abi, process.env.LXO_FACTORY_ADDRESS);
+    const product = await productRepository.getProductById(productId);
+
+    const LXOContract = new provider.eth.Contract(abi, product.nftContractAddress);
 
     provider.eth.accounts.wallet.add(process.env.ACCOUNT_PASS);
 
-    const tx = LXOContract.methods.createItem(ownerAddress, productIdentifier, mintData);
+    const tx = LXOContract.methods.createItem(ownerAddress, productReference, productIdentifier, mintData);
     const gas = await tx.estimateGas({ from: process.env.LXO_ACCOUNT });
 
     const gasPrice = await provider.eth.getGasPrice();
@@ -115,13 +117,25 @@ export async function mintProductItem(productRepository: ProductRepository, owne
 
         console.log('MINT ITEM TRANSACTION SENT!');
         provider.eth.accounts.wallet.clear();
-        await productRepository.updateProductItem({ transactionHash }, productItemId);
+        // await productRepository.updateProductItem({ transactionHash }, productItemId);
 
     }).on('receipt', async (receipt: TransactionReceipt) => {
 
         console.log('MINT ITEM TRANSACTION COMPLETED!');
         console.log(receipt);
-        // await productRepository.updateProductItem({ transactionHash }, productItemId);
+
+        const inputs = [
+            { type: 'address', name: 'ownerAddress' },
+            { type: 'string', name: 'productReference' },
+            { type: 'string', name: 'productIdentifier' },
+            { type: 'uint256', name: 'tokenId' }
+        ];
+        const data = receipt.logs[1].data;
+        const topics = receipt.logs[1].topics;
+
+        const logs = provider.eth.abi.decodeLog(inputs, data, topics);
+
+        console.log(logs);
 
     }).on('error', (error: Error) => {
         console.log('THERE WAS AN ERROR SENDING YOUR TRANSACTION!');

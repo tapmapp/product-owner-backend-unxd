@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, PrismaPromise } from '@prisma/client';
 
 // MODELS
-import { Product, ProductItem, ProductItemInput } from './product.model';
+import { Product, ProductItem } from './product.model';
 
 // SERVICES
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -22,6 +22,12 @@ export class ProductRepository {
         });
     }
 
+    public async getProductById(productId: string): Promise<Product> {
+        return this.prisma.product.findFirst({
+            where: { id: productId },
+        });
+    }
+
     public async getProductItem(productIdentifier: string): Promise<ProductItem> {
         return this.prisma.productItem.findFirst({
             where: { productIdentifier },
@@ -32,7 +38,7 @@ export class ProductRepository {
         return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productIdentifiers } });
     }
 
-    public addProductItems(productItems: ProductItemInput[]): PrismaPromise<Prisma.BatchPayload> {
+    public addProductItems(productItems: ProductItem[]): PrismaPromise<Prisma.BatchPayload> {
         return this.prisma.productItem.createMany({ data: productItems });
     }
 

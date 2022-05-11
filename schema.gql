@@ -35,6 +35,7 @@ type Query {
   getAccounts: [Account!]!
   logIn(accountEmail: String!, accountPassword: String!): Account!
   getProduct(productReference: String!): Product!
+  getProductById(productId: String!): Product!
   getProductItem(productIdentifier: String!): ProductItem!
   getProducts: [Product!]!
 }
@@ -43,7 +44,7 @@ type Mutation {
   signIn(accountEmail: String!, accountPassword: String!, accountName: String!): Account!
   removeAccount(accountEmail: String!): Boolean!
   addProduct(productImg: String!, productName: String!, brandId: String!, productReference: String!, productIdentifiers: [ProductItemInput!]!): Product!
-  mintProductItem(ownerAddress: String!, productItemId: String!, productIdentifier: String!, tokenUri: String!): Boolean!
+  mintProductItem(ownerAddress: String!, productId: String!, productRef: String!, productIdentifier: String!, tokenUri: String!): Boolean!
   removeProduct(productReference: String!): Boolean!
 }
 

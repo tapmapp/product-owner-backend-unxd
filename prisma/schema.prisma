@@ -9,37 +9,40 @@ datasource db {
 }
 
 model Product {
-  id String @id @default(uuid())
-  brandId String
-  productImg String
-  productName String
-  productReference String @unique
-  productIdentifiers String[] 
-  nftTransactionHash String? @unique
-  nftContractAddress String? @unique
+  id                 String        @id @default(uuid())
+  brandId            String
+  productImg         String
+  productName        String
+  productReference   String        @unique
+  productIdentifiers String[]
+  nftTransactionHash String?       @unique
+  nftContractAddress String?       @unique
+  ProductItem        ProductItem[]
 }
 
 model ProductItem {
-  id String @id @default(uuid())
+  id                String  @id @default(uuid())
   productIdentifier String
-  tokenId Int?
-  transactionHash String? @unique
+  tokenId           Int?
+  transactionHash   String? @unique
+  product           Product @relation(fields: [productId], references: [id])
+  productId         String
 }
 
 model Account {
-  id String @id @default(uuid())
-  accountEmail String @unique
-  accountPassword String
-  accountName String
-  accountAvatar String?
+  id                   String  @id @default(uuid())
+  accountEmail         String  @unique
+  accountPassword      String
+  accountName          String
+  accountAvatar        String?
   accountWalletAddress String?
-  role String?
+  role                 String?
 }
 
 model Owner {
-  id String @id @default(uuid())
-  brandId String
-  productReference String @unique
+  id                String @id @default(uuid())
+  brandId           String
+  productReference  String @unique
   productIdentifier String @unique
-  transactionHash String @unique
+  transactionHash   String @unique
 }

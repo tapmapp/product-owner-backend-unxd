@@ -29,6 +29,9 @@ export class ProductItem {
     @Field(() => String, { nullable: true })
     transactionHash?: string;
 
+    @Field(() => String)
+    productId: string;
+
 }
 
 @ObjectType()

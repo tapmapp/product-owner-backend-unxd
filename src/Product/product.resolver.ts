@@ -21,6 +21,14 @@ export class ProductResolver {
         return product;
     }
 
+    @Query(() => Product)
+    async getProductById(
+        @Args('productId') productId: string
+    ): Promise<Product> {
+        const product = await this.productService.getProductById(productId);
+        return product;
+    }
+
     @Query(() => ProductItem)
     async getProductItem(
         @Args('productIdentifier') productIdentifier: string
@@ -50,11 +58,13 @@ export class ProductResolver {
     @Mutation(() => Boolean)
     async mintProductItem(
         @Args({ name: 'ownerAddress', type: () => String }) ownerAddress: string,
-        @Args({ name: 'productItemId', type: () => String }) productItemId: string,
+        @Args({ name: 'productId', type: () => String }) productId: string,
+        @Args({ name: 'productRef', type: () => String }) productRef: string,
         @Args({ name: 'productIdentifier', type: () => String }) productIdentifier: string,
         @Args({ name: 'tokenUri', type: () => String }) tokenUri: string,
-    ): Promise<void> {
-        await this.productService.mintProductItem(ownerAddress, productItemId, productIdentifier, tokenUri)
+    ): Promise<boolean> {
+        await this.productService.mintProductItem(ownerAddress, productId, productRef, productIdentifier, tokenUri);
+        return true;
     }
 
     @Mutation(() => Boolean)
