@@ -6,9 +6,6 @@ export class ProductItemInput {
     @Field(() => String)
     productIdentifier: string;
 
-    @Field(() => String)
-    productId: string;
-
     @Field(() => Number, { nullable: true })
     tokenId?: number;
 

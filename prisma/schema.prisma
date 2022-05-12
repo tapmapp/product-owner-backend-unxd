@@ -17,7 +17,6 @@ model Product {
   productIdentifiers String[]
   nftTransactionHash String?       @unique
   nftContractAddress String?       @unique
-  ProductItem        ProductItem[]
 }
 
 model ProductItem {
@@ -25,7 +24,6 @@ model ProductItem {
   productIdentifier String
   tokenId           Int?
   transactionHash   String? @unique
-  product           Product @relation(fields: [productId], references: [id])
   productId         String
 }
 

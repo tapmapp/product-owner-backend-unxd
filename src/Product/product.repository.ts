@@ -38,7 +38,7 @@ export class ProductRepository {
         return this.prisma.product.create({ data: { productImg, productName, brandId, productReference, productIdentifiers } });
     }
 
-    public addProductItems(productItems: ProductItemInput[]): PrismaPromise<Prisma.BatchPayload> {
+    public addProductItems(productItems: ProductItem[]): PrismaPromise<Prisma.BatchPayload> {
         return this.prisma.productItem.createMany({ data: productItems });
     }
 

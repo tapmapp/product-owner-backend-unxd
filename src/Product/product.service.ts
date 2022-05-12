@@ -38,6 +38,7 @@ export class ProductService {
 
         const productItems = productIdentifiers.map((productIdentifier: ProductItemInput, i: number) => {
             return {
+                id: crypto.randomUUID(),
                 productIdentifier: productIdentifier.productIdentifier,
                 productId: addedProduct.id
             }

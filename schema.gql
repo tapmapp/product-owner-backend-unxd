@@ -15,9 +15,9 @@ type Account {
 type ProductItem {
   id: String!
   productIdentifier: String!
+  productId: String!
   tokenId: Float
   transactionHash: String
-  productId: String!
 }
 
 type Product {
